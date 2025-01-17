@@ -32,6 +32,8 @@ def process_message(log_file) -> None:
         file.seek(0, os.SEEK_END)
         print("Consumer is ready and waiting for a new log message...")
 
+        alert_times = {}  # Store timestamps for recent alerts
+
         # Use while True loop so the consumer keeps running forever
         while True:
 
@@ -56,7 +58,7 @@ def process_message(log_file) -> None:
                 now = datetime.now() 
                 if "odd" in alert_times:
                         last_alert_time = alert_times["odd"]
-                        if now - last_alert_time < timedelta(second=2):
+                        if now - last_alert_time < timedelta(seconds=2):
                             # Skip alert if it's too soon after last one
                             continue
 
