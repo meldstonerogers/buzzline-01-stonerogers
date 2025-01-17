@@ -11,3 +11,6 @@ __pycache__/
 
 # macOS system files
 .DS_Store
+
+# to work around space issue to committing to GitHub 
+logs/project_log.log
