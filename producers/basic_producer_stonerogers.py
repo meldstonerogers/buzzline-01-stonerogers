@@ -1,5 +1,5 @@
 """
-basic_generator_case.py
+basic_generator_stonerogers.py
 
 Generate some streaming buzz messages. 
 """
@@ -9,12 +9,19 @@ Generate some streaming buzz messages.
 #####################################
 
 # Import packages from Python Standard Library
+import sys
 import os
 import random
 import time
 
 # Import external packages (must be installed in .venv first)
 from dotenv import load_dotenv
+
+# Define the path to the parent directory of the utils folder
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+# Add the parent directory to the system path
+sys.path.append(parent_dir)
 
 # Import functions from local modules
 from utils.utils_logger import logger
@@ -32,22 +39,6 @@ load_dotenv()
 
 # Define a function to fetch the message interval from the environment
 def get_message_interval() -> int:
-    """
-    Fetch message interval from environment or use a default value.
-
-    It doesn't need any outside information, so the parentheses are empty.
-    It returns an integer, so we specify that in the function signature.
-
-    The colon at the end of the function signature is required.
-    All statements inside the function must be consistently indented.
-
-    Define a local variable to hold the value of the environment variable
-    os.getenv() is a function that fetches the value of an environment variable
-    os.getenv() always returns a string 
-    We convert the return value to an integer using the built-in Python int() function
-    To use handy functions like this, import the os module 
-    from the Python Standard Library (see above).
-    """
     return_value: str = os.getenv("MESSAGE_INTERVAL_SECONDS", 3)
     interval: int = int(return_value)
     logger.info(f"Messages will be sent every {interval} seconds.")
@@ -59,7 +50,7 @@ def get_message_interval() -> int:
 #####################################
 
 # Define some lists for generating buzz messages
-ADJECTIVES: list = ["amazing", "funny", "boring", "exciting", "weird"]
+ADJECTIVES: list = ["odd", "lame", "awesome", "silly", "funny"]
 ACTIONS: list = ["found", "saw", "tried", "shared", "loved"]
 TOPICS: list = ["a movie", "a meme", "an app", "a trick", "a story"]
 
@@ -69,16 +60,6 @@ TOPICS: list = ["a movie", "a meme", "an app", "a trick", "a story"]
 
 
 def generate_messages():
-    """
-    Generate a stream of buzz messages.
-
-    This function uses a generator, which yields one buzz at a time.
-    Generators are memory-efficient because they produce items on the fly
-    rather than creating a full list in memory.
-
-    Because this function uses a while True loop, it will run continuously 
-    until we close the window or hit CTRL c (CMD c on Mac/Linux).
-    """
     while True:
         adjective = random.choice(ADJECTIVES)
         action = random.choice(ACTIONS)
@@ -92,18 +73,8 @@ def generate_messages():
 
 
 def main() -> None:
-    """
-    Main entry point for this producer.
 
-    It doesn't need any outside information, so the parentheses are empty.
-    It doesn't return anything, so we say the return type is None.   
-    The colon at the end of the function signature is required.
-    All statements inside the function must be consistently indented. 
-    This is a multiline docstring - a special type of comment 
-    that explains what the function does.
-    """
-
-    logger.info("START producer...")
+    logger.info("START custom producer script...")
     logger.info("Hit CTRL c (or CMD c) to close.")
     
     # Call the function we defined above to get the message interval
@@ -117,7 +88,7 @@ def main() -> None:
         time.sleep(interval_secs)
 
     logger.info("NOTE: See the `logs` folder to learn more.")
-    logger.info("END producer.....")
+    logger.info("END custom producer script.....")
 
 
 #####################################
