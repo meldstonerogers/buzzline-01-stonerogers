@@ -11,20 +11,15 @@ Read a log file as it is being written.
 # Import packages from Python Standard Library
 import os
 import time
+from datetime import datetime, timedelta
 
 # Import functions from local modules
 from utils.utils_logger import logger, get_log_file_path
 
 #####################################
-# Initaialize global variables 
-# #####################################
-
-last_message = None # variable to track the most recent message
-alert_triggered = False # Initialize a flag to track whether the special condition has been logged
-
-#####################################
 # Define a function to process a single message
 # #####################################
+
 def process_message(log_file) -> None:
     """
     Read a log file and process each message.
@@ -56,23 +51,19 @@ def process_message(log_file) -> None:
             message = line.strip()
             print(f"Consumed log message: {message}")
 
-def check_and_alert(message):
-    global last_message, alert_triggered
+            # monitor and alert on special conditions
+            if "odd" in message:
+                now = datetime.now() 
+                if "odd" in alert_times:
+                        last_alert_time = alert_times["odd"]
+                        if now - last_alert_time < timedelta(second=2):
+                            # Skip alert if it's too soon after last one
+                            continue
 
-    # Only check and alert if the message is new
-    if message != last_message:
-        last_message = message # Update the last message
-
-        # monitor and alert on special conditions
-        if "odd" in message:
-            if not alert_triggered: # Only alert if it hasn't been logged yet
-                print(f"ALERT: An oddity was found! \n{message}")
-                logger.warning(f"ALERT: An oddity was found! \n{message}")
-                alert_triggered = True #Set the flag to prevent repeated alerts
-
-        else: 
-            alert_triggered = False # Reset the flag if the condition is no longer true
-
+                # Log and print alert
+                print(f"ALERT: An oddity was found!")
+                logger.warning(f"An oddity was found!")
+                alert_times["odd"] = now # Update the last alert time     
 
 #####################################
 # Define main function for this script.
