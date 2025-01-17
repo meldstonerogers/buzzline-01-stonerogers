@@ -1,0 +1,1 @@
+logs/project_log.log filter=lfs diff=lfs merge=lfs -text
