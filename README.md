@@ -1,9 +1,13 @@
-# buzzline-01-case
+# buzzline-01-stonerogers
+Streaming Data, Project 1
+Melissa Stone Rogers, [GitHub](https://github.com/meldstonerogers/buzzline-01-stonerogers)
 
-This project introduces streaming data. 
-The Python language includes generators - we'll use this feature to generate some streaming buzzline messages. 
-As the code runs, it will continuously update log file. 
-We'll use a consumer to modify this log file and alert us when a special message is detected. 
+## Introduction
+
+This is a professional project introducing the use of streaming data, using Python Version 3.11 and Git. 
+The Python language includes generators - this feature will generate some streaming buzzline messages. 
+As the code runs, it will continuously update log file. A consumer is used to modify this log file and alert to when a specific message is detected. This project was forked from Dr. Case's project repository found [here](https://github.com/denisecase/buzzline-01-case). Much of the detailed instructions in this README.md were borrowed from Dr. Case's project specifications, and updated for my machine.
+Commands were used on a Mac machine running zsh.   
 
 ## Task 1. Set Up Your Machine
 
@@ -22,15 +26,7 @@ For detailed instructions, see:
 - [SETUP-MAC-LINUX.md](docs/SETUP-MAC-LINUX.md)
 - [SETUP-WINDOWS.md](docs/SETUP-WINDOWS.md)
 
-## Python Versions (3.11 for this course)
-
-The most current version of Python is 3.13. 
-This course will use advanced tools (such as Kafka) that still require Python 3.11. 
-You are encouraged to install both and practice multiple versions. 
-If space is an issue, we only need 3.11 in this course. 
-For more information, See [PYTHON-VERSIONS.md](docs/PYTHON-VERSIONS.md).
-
-## Task 2. Copy This Example Project & Change `case` to `yourname` (customized)
+## Task 2. Copy This Example Project & Customize your Repo Name
 
 Once the tools are installed, copy/fork this project into your GitHub account
 and create your own version of this project to run and experiment with. 
@@ -51,56 +47,81 @@ Follow the instructions in [MANAGE-VENV.md](docs/MANAGE-VENV.md) to:
 2. Activate .venv
 3. Install the required dependencies using requirements.txt.
 
-The instructions are repeated in requirements.txt as this file exists in all our projects. 
+### Initial Project Commit 
+Turn on the autosave function in VS Code. Push changes to GitHub freqently to effectively track changes. Update the commit message to a meaningful note for your changes. 
+```zsh
+git add .
+git commit -m "initial"                         
+git push origin main
+```
 
 ## Task 4. Generate Streaming Data (Terminal 1)
-
-Now we'll generate some streaming data. 
-By the way - you've done 90% of the hard work before we even look at code. 
-Congratulations!
 
 In VS Code, open a terminal.
 Use the commands below to activate .venv, and run the generator as a module. 
 To learn more about why we run our Python file as a module, see [PYTHON-PKG-IMPORTS](docs/PYTHON-PKG-IMPORTS.md) 
 
-Windows PowerShell:
-
-```shell
-.venv\Scripts\activate
-py -m producers.basic_producer_case
-```
-
-Mac/Linux:
 ```zsh
 source .venv/bin/activate
-python3 -m producers.basic_producer_case
+python3 -m producers.basic_producer_stonerogers
 ```
 
 ## Task 5. Monitor an Active Log File (Terminal 2)
 
-A common streaming task is monitoring a log file as it is being written. 
-This project has a consumer that reads and processes our own log file as log messages arrive. 
-
 In VS Code, open a NEW terminal in your root project folder. 
 Use the commands below to activate .venv, and run the file as a module. 
-
-Windows:
-```shell
-.venv\Scripts\activate
-py -m consumers.basic_consumer_case
-```
 
 Mac/Linux:
 ```zsh
 source .venv/bin/activate
-python3 -m consumers.basic_consumer_case
+python3 -m consumers.basic_consumer_stonerogers
+```
+
+### Troubleshooting Consumer Alerts
+I ran into an issue running my consumer file, when an alert for a special condition was triggered, the alert would continuously appear, eventually causing VS Code to quit. I troubleshooted various code options consulting with ChatGPT, but either the issue would persist, or the alert would not trigger at all. A classmate had a similar issue and was able to adjust the code to where the error stopped occuring. The following code was borrowed from Justin Kilchenmann's similar [project](https://github.com/jkilchenmann/buzzline-01-kilchenmann/blob/main/consumers/basic_consumer_kilchenmann.py). Below is the adjusted code used within my project. 
+
+```zsh
+# monitor and alert on special conditions
+if "odd" in message:
+    now = datetime.now() 
+    if "odd" in alert_times:
+            last_alert_time = alert_times["odd"]
+            if now - last_alert_time < timedelta(seconds=2):
+                # Skip alert if it's too soon after last one
+                continue
+
+    # Log and print alert
+    print(f"ALERT: An oddity was found!")
+    logger.warning(f"An oddity was found!")
+    alert_times["odd"] = now # Update the last alert time  
 ```
 
 ## Save Space
 To save disk space, you can delete the .venv folder when not actively working on this project.
 We can always recreate it, activate it, and reinstall the necessary packages later. 
 Managing Python virtual environments is a necessary and valuable skill. 
-We will get a good amount of practice. 
+
+Additionally, I became unable to commit to GitHub due to the size of the project_log.log file. To work around this, I removed the previous commits of this file from GitHub, then I added this file within .gitignore. From here, I was able to commit to GitHub without issues. I utilized BFG-Repo Cleaner for this task. 
+
+```zsh
+brew install bfg
+```
+```zsh
+cd /Users/melissastonerogers/Documents/streamingdata/buzzline-01-stonerogers
+```
+```zsh
+bfg --delete-files 'project_log.log'
+```
+```zsh
+git push --force origin main
+```
+## Complete Your Project
+Save your project and push back to your repository. 
+```
+git add .
+git commit -m "final"                         
+git push origin main
+```
 
 ## License
 This project is licensed under the MIT License as an example project. 
