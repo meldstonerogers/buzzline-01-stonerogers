@@ -77,6 +77,29 @@ source .venv/bin/activate
 python3 -m consumers.basic_consumer_stonerogers
 ```
 
+### Troubleshooting Producer File
+When trying to run my producer file, I kept getting the error my util_logger.py file was unable to be found. To keep this file available for all files referencing it, I consulted ChatGPT and made the following adjustments to the code. I imported the sys [module](https://docs.python.org/3/library/sys.html) to define the to the parent directly and insure the parent directly was in the sytem path. After this adjustment, the producer file ran without issue. 
+
+```zsh
+# Import packages from Python Standard Library
+import sys
+import os
+import random
+import time
+
+# Import external packages (must be installed in .venv first)
+from dotenv import load_dotenv
+
+# Define the path to the parent directory of the utils folder
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+# Add the parent directory to the system path
+sys.path.append(parent_dir)
+
+# Import functions from local modules
+from utils.utils_logger import logger
+```
+
 ### Troubleshooting Consumer Alerts
 I ran into an issue running my consumer file, when an alert for a special condition was triggered, the alert would continuously appear, eventually causing VS Code to quit. I troubleshooted various code options consulting with ChatGPT, but either the issue would persist, or the alert would not trigger at all. A classmate had a similar issue and was able to adjust the code to where the error stopped occuring. The following code was borrowed from Justin Kilchenmann's similar [project](https://github.com/jkilchenmann/buzzline-01-kilchenmann/blob/main/consumers/basic_consumer_kilchenmann.py). Below is the adjusted code used within my project. 
 
